@@ -4,8 +4,6 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using System.Linq;
-// using System.Collections;
 
 namespace BackgroundBlurImproved;
 
@@ -13,20 +11,18 @@ namespace BackgroundBlurImproved;
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     private readonly Harmony harmony = new(Id);
 
-    private void Awake()
-    {
+    private void Awake() {
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
         harmony.PatchAll();
     }
 
     [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
-    public class BlurManagerPatched
-    {
+    public class PatchedBlurManager_Awake {
         [HarmonyPrefix]
-        static void Awake_Postfix(BlurManager __instance)
-        {
-            Debug.Log($"BlurManager.Awake() called on {__instance}, with baseHeight {__instance.baseHeight}");
-            __instance.baseHeight = 540;
+        static void Prefix(BlurManager __instance) {
+            var adjustedBaseHeight = 540;
+            Debug.Log($"BlurManager.Awake() called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight} -> {adjustedBaseHeight}");
+            __instance.baseHeight = adjustedBaseHeight;
             /*
             1	2160
             2	1080
@@ -42,8 +38,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         }
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -51,21 +46,17 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         GameObject[] allResources = Resources.FindObjectsOfTypeAll<GameObject>();
         foreach (var resource in allResources) {
-            if (resource.name.ToLower().Contains("blurmanager"))
-            {
+            if (resource.name.ToLower().Contains("blurmanager")) {
                 Logger.LogInfo($"found!!! {resource}");
             }
         }
 
         GameObject[] allGameObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (var gameObject in allGameObjects) {
-            if (gameObject.name.ToLower().Contains("blurmanager"))
-            {
+            if (gameObject.name.ToLower().Contains("blurmanager")) {
                 Logger.LogInfo($"found!!! {gameObject}");
             }
         }
