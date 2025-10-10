@@ -37,14 +37,33 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         harmony.PatchAll();
     }
 
-    [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
-    public class PatchedBlurManager_Awake {
+    [HarmonyPatch]
+    internal class Patcher {
+        [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
         [HarmonyPrefix]
-        static void Prefix(BlurManager __instance) {
+        static void BlurManager_Awake(BlurManager __instance) {
             var adjustedBaseHeight = (int)BaseHeightConfig.Value;
             Debug.Log($"BlurManager.Awake() called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight} -> {adjustedBaseHeight}");
             __instance.baseHeight = adjustedBaseHeight;
         }
+
+        /*
+        [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.PassGroupCount), MethodType.Setter)]
+        [HarmonyPrefix]
+        static void LightBlur_PassGroupCount_Setter(LightBlur __instance) {
+            Debug.Log($"LightBlur.PassGroupCount.setter called on {__instance} hash:{__instance.GetHashCode()} passGroupCount: {__instance.passGroupCount} -> 8");
+            __instance.passGroupCount = 8; // works, but it doesn't do anything
+        }
+
+        [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.Awake))]
+        [HarmonyPrefix]
+        static void LightBlur_Awake(LightBlur __instance) {
+            Debug.Log($"LightBlur.Awake called on {__instance} hash:{__instance.GetHashCode()}, will set blurShader");
+            // var blur = new BlurOptimized();
+            var blurShader = Shader.Find("Hidden/FastBlur");
+            Debug.Log($"Instantiated {blurShader}");
+            __instance.blurShader = blurShader;
+        } */
     }
 
     private void OnEnable() {
