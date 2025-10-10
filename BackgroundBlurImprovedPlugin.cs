@@ -7,7 +7,7 @@ using System;
 
 namespace BackgroundBlurImproved;
 
-[BepInAutoPlugin("io.github.hksbetterblur", "BackgroundBlurImproved", "0.1.0")]
+[BepInAutoPlugin("mod.silksong.backgroundblurimproved", "BackgroundBlurImproved", "0.1.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     private readonly Harmony harmony = new(Id);
 
