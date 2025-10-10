@@ -24,16 +24,28 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         res240 = 240,
         res216 = 216,
     }
-    public static ConfigEntry<BlurHeight> BaseHeightConfig;
+    public static ConfigEntry<BlurHeight> blurHeightConfigEntry;
+
+    static LightBlurredBackground? lightBlurredBackground;
 
     private void Awake() {
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
-        BaseHeightConfig = Config.Bind(
+        blurHeightConfigEntry = Config.Bind(
             "General",
-            "BackgroundBlur layer height",
+            "BlurredBackgroundLayerHeight",
             BlurHeight.res360Default,
-            "The height of the BackgroundBlur layer. Quit & reload is required in order to apply the changes."
+            "The height of the BlurredBackground layer"
         );
+        blurHeightConfigEntry.SettingChanged += (_, _) => {
+            var newValue = (int)blurHeightConfigEntry.Value;
+            Logger.LogInfo($"blurHeightConfigEntry.SettingChanged -> {newValue}");
+            if (lightBlurredBackground != null) {
+                Logger.LogInfo($"will set RenderTextureHeight for {lightBlurredBackground} {lightBlurredBackground.renderTextureHeight} -> {newValue}");
+                lightBlurredBackground.RenderTextureHeight = newValue;
+                lightBlurredBackground.enabled = false;
+                lightBlurredBackground.enabled = true;
+            }
+        };
         harmony.PatchAll();
     }
 
@@ -41,10 +53,17 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     internal class Patcher {
         [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
         [HarmonyPrefix]
-        static void BlurManager_Awake(BlurManager __instance) {
-            var adjustedBaseHeight = (int)BaseHeightConfig.Value;
-            Debug.Log($"BlurManager.Awake() called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight} -> {adjustedBaseHeight}");
+        static void BlurManager_Awake_Prefix(BlurManager __instance) {
+            var adjustedBaseHeight = (int)blurHeightConfigEntry.Value;
+            Debug.Log($"BlurManager.Awake()_prefix called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight} -> {adjustedBaseHeight}");
             __instance.baseHeight = adjustedBaseHeight;
+        }
+        
+        [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
+        [HarmonyPostfix]
+        static void BlurManager_Awake_Postfix(BlurManager __instance) {
+            lightBlurredBackground = __instance.lightBlurredBackground;
+            Debug.Log($"BlurManager.Awake()_postfix called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight}");
         }
 
         /*
