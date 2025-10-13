@@ -24,21 +24,24 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         res240 = 240,
         res216 = 216,
     }
-    public static ConfigEntry<BlurHeight> blurHeightConfigEntry;
+    public static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
+    public static ConfigEntry<int> blurPassGroupCountConfigEntry;
 
     static LightBlurredBackground? lightBlurredBackground;
 
     private void Awake() {
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
-        blurHeightConfigEntry = Config.Bind(
+        harmony.PatchAll();
+
+        blurRenderTextureHeightConfigEntry = Config.Bind(
             "General",
-            "BlurredBackgroundLayerHeight",
+            "BlurRenderTextureHeight",
             BlurHeight.res360Default,
             "The height of the BlurredBackground layer"
         );
-        blurHeightConfigEntry.SettingChanged += (_, _) => {
-            var newValue = (int)blurHeightConfigEntry.Value;
-            Logger.LogInfo($"blurHeightConfigEntry.SettingChanged -> {newValue}");
+        blurRenderTextureHeightConfigEntry.SettingChanged += (sender, args) => {
+            var newValue = (int)blurRenderTextureHeightConfigEntry.Value;
+            Logger.LogInfo($"blurRenderTextureHeightConfigEntry.SettingChanged -> {newValue}");
             if (lightBlurredBackground != null) {
                 Logger.LogInfo($"will set RenderTextureHeight for {lightBlurredBackground} {lightBlurredBackground.renderTextureHeight} -> {newValue}");
                 lightBlurredBackground.RenderTextureHeight = newValue;
@@ -46,7 +49,25 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
                 lightBlurredBackground.enabled = true;
             }
         };
-        harmony.PatchAll();
+        blurPassGroupCountConfigEntry = Config.Bind(
+            "General",
+            "BlurPassGroupCount",
+            2,
+            new ConfigDescription(
+                "The number of passes of the BlurredBackground layer",
+                new AcceptableValueRange<int>(1, 48)
+            )
+        );
+        blurPassGroupCountConfigEntry.SettingChanged += (sender, args) => {
+            var newValue = (int)blurPassGroupCountConfigEntry.Value;
+            Logger.LogInfo($"blurPassGroupCountConfigEntry.SettingChanged -> {newValue}");
+            if (lightBlurredBackground != null) {
+                Logger.LogInfo($"will set PassGroupCount for {lightBlurredBackground} {lightBlurredBackground.passGroupCount} -> {newValue}");
+                lightBlurredBackground.PassGroupCount = newValue;
+                lightBlurredBackground.enabled = false;
+                lightBlurredBackground.enabled = true;
+            }
+        };
     }
 
     [HarmonyPatch]
@@ -54,7 +75,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
         [HarmonyPrefix]
         static void BlurManager_Awake_Prefix(BlurManager __instance) {
-            var adjustedBaseHeight = (int)blurHeightConfigEntry.Value;
+            var adjustedBaseHeight = (int)blurRenderTextureHeightConfigEntry.Value;
             Debug.Log($"BlurManager.Awake()_prefix called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight} -> {adjustedBaseHeight}");
             __instance.baseHeight = adjustedBaseHeight;
         }
@@ -66,14 +87,15 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             Debug.Log($"BlurManager.Awake()_postfix called on {__instance} hash:{__instance.GetHashCode()} baseHeight:{__instance.baseHeight}");
         }
 
-        /*
-        [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.PassGroupCount), MethodType.Setter)]
-        [HarmonyPrefix]
-        static void LightBlur_PassGroupCount_Setter(LightBlur __instance) {
-            Debug.Log($"LightBlur.PassGroupCount.setter called on {__instance} hash:{__instance.GetHashCode()} passGroupCount: {__instance.passGroupCount} -> 8");
-            __instance.passGroupCount = 8; // works, but it doesn't do anything
+        [HarmonyPatch(typeof(LightBlurredBackground), nameof(LightBlurredBackground.Awake))]
+        [HarmonyPostfix]
+        static void LightBlurredBackground_Awake(LightBlurredBackground __instance) {
+            var adjustedPassGroupCount = (int)blurPassGroupCountConfigEntry.Value;
+            Debug.Log($"LightBlurredBackground.Awake called on {__instance} hash:{__instance.GetHashCode()} passGroupCount: {__instance.passGroupCount} -> {adjustedPassGroupCount}");
+            __instance.passGroupCount = adjustedPassGroupCount;
         }
-
+        
+        /*
         [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.Awake))]
         [HarmonyPrefix]
         static void LightBlur_Awake(LightBlur __instance) {
@@ -82,7 +104,9 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             var blurShader = Shader.Find("Hidden/FastBlur");
             Debug.Log($"Instantiated {blurShader}");
             __instance.blurShader = blurShader;
-        } */
+            // TODO: custom shader for passthrough / fading out to unblurred
+        }
+        */
     }
 
     private void OnEnable() {
