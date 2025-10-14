@@ -13,14 +13,11 @@
     <RestoreAdditionalProjectSources>
       https://nuget.bepinex.dev/v3/index.json
     </RestoreAdditionalProjectSources>
+    <RestorePackagesWithLockFile>True</RestorePackagesWithLockFile>
     <!--Allow access of private members at runtime.-->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!--These properties will control the generated plugin info. Version is also used by various parts of the build system.-->
-    <AssemblyTitle>BackgroundBlurImproved</AssemblyTitle>
-    <Version>0.1.0</Version>
+    <!--Shortens and anonymizes paths in debug symbols relative to the project directory. Breakpoints will not work, however.-->
+    <PathMap Condition="'$(Configuration)' == 'Release'">$(MSBuildProjectDirectory)=/</PathMap>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +26,7 @@
     <PackageReference Include="Hamunii.BepInEx.AutoPlugin" Version="2.0.1" PrivateAssets="all"/>
     <PackageReference Include="UnityEngine.Modules" Version="6000.0.50" IncludeAssets="compile" />
     <!--If you're unable resolve this dependency, check that you're using the nuget v3 package feed instead of v2.-->
-    <PackageReference Include="Silksong.GameLibs" Version="1.1.0-silksong1.0.28714"/>
+    <PackageReference Include="Silksong.GameLibs" Version="*-*" PrivateAssets="all"/>
   </ItemGroup>
 
   <Target Name="CopyMod" AfterTargets="PostBuildEvent" Condition="'$(SilksongFolder)' != ''">

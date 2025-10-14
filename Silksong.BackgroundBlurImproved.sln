@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundBlurImproved", "BackgroundBlurImproved.csproj", "{C1DE9C2C-88F1-DD5C-D887-82FE2B0DA70A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silksong.BackgroundBlurImproved", "Silksong.BackgroundBlurImproved.csproj", "{FE553B58-731C-5132-769C-F828041E91F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,15 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C1DE9C2C-88F1-DD5C-D887-82FE2B0DA70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1DE9C2C-88F1-DD5C-D887-82FE2B0DA70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1DE9C2C-88F1-DD5C-D887-82FE2B0DA70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1DE9C2C-88F1-DD5C-D887-82FE2B0DA70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE553B58-731C-5132-769C-F828041E91F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE553B58-731C-5132-769C-F828041E91F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE553B58-731C-5132-769C-F828041E91F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE553B58-731C-5132-769C-F828041E91F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5A11FB4B-0986-48BA-BBDA-A22FD195EE4F}
+		SolutionGuid = {62D20227-65D8-4285-A3BD-A6294737E8E2}
 	EndGlobalSection
 EndGlobal
