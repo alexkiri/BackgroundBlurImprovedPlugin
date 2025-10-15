@@ -1,29 +1,15 @@
 using BepInEx;
 using BepInEx.Configuration;
+using GenericVariableExtension;
 using HarmonyLib;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
 
 namespace BackgroundBlurImproved;
 
-[BepInAutoPlugin("mod.silksong.backgroundblurimproved", "BackgroundBlurImproved", "0.1.0")]
+[BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.2.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     private readonly Harmony harmony = new(Id);
 
-    private enum BlurHeight {
-        res2160 = 2160,
-        res1440 = 1440,
-        res1080 = 1080,
-        res720 = 720,
-        res576 = 576,
-        res540 = 540,
-        res432 = 432,
-        res360Default = 360,
-        res270 = 270,
-        res240 = 240,
-        res216 = 216,
-    }
     private static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
     private static ConfigEntry<int> blurPassGroupCountConfigEntry;
     private static ConfigEntry<bool> blurEnableConfigEntry;
@@ -36,16 +22,16 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
 
         blurRenderTextureHeightConfigEntry = Config.Bind(
             "General",
-            "BlurRenderTextureHeight",
-            BlurHeight.res360Default,
-            "The height of the BlurredBackground layer"
+            "RenderTextureHeight",
+            BlurHeight.High_720,
+            "The height of the BlurredBackground layer. The game default is 360. Low impact on performance."
         );
         blurRenderTextureHeightConfigEntry.SettingChanged += (sender, args) => {
             var newValue = (int)blurRenderTextureHeightConfigEntry.Value;
-            var blurEnable = (bool)blurEnableConfigEntry.Value;
             Logger.LogInfo($"blurRenderTextureHeightConfigEntry.SettingChanged -> {newValue}");
-            if (lightBlurredBackground != null && blurEnable) {
+            if (lightBlurredBackground != null) {
                 Logger.LogInfo($"will set RenderTextureHeight for {lightBlurredBackground} {lightBlurredBackground.renderTextureHeight} -> {newValue}");
+                blurEnableConfigEntry.Value = true;
                 lightBlurredBackground.RenderTextureHeight = newValue;
                 lightBlurredBackground.enabled = false;
                 lightBlurredBackground.enabled = true;
@@ -53,19 +39,19 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         };
         blurPassGroupCountConfigEntry = Config.Bind(
             "General",
-            "BlurPassGroupCount",
-            2,
+            "PassGroupCount",
+            4,
             new ConfigDescription(
-                "The number of passes of the BlurredBackground layer",
+                "The number of passes of the BlurredBackground layer. The game default is 2. Medium impact on performance.",
                 new AcceptableValueRange<int>(1, 64)
             )
         );
         blurPassGroupCountConfigEntry.SettingChanged += (sender, args) => {
             var newValue = (int)blurPassGroupCountConfigEntry.Value;
-            var blurEnable = (bool)blurEnableConfigEntry.Value;
             Logger.LogInfo($"blurPassGroupCountConfigEntry.SettingChanged -> {newValue}");
-            if (lightBlurredBackground != null && blurEnable) {
+            if (lightBlurredBackground != null) {
                 Logger.LogInfo($"will set PassGroupCount for {lightBlurredBackground} {lightBlurredBackground.passGroupCount} -> {newValue}");
+                blurEnableConfigEntry.Value = true;
                 lightBlurredBackground.PassGroupCount = newValue;
                 lightBlurredBackground.enabled = false;
                 lightBlurredBackground.enabled = true;
@@ -73,7 +59,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         };
         blurEnableConfigEntry = Config.Bind(
             "General",
-            "BlurEnable",
+            "EnableEffect",
             true,
             "When disabled, the BlurredBackground effect is completely removed, and the other settings have no effect"
         );
@@ -113,35 +99,5 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             Debug.Log($"LightBlur.Awake called on {__instance} hash:{__instance.GetHashCode()}, will enable {blurEnable}");
             __instance.enabled = blurEnable;
         }
-    }
-
-    private void OnEnable() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        GameObject[] allResources = Resources.FindObjectsOfTypeAll<GameObject>();
-        foreach (var resource in allResources) {
-            if (resource.name.ToLower().Contains("blurmanager")) {
-                Logger.LogInfo($"found!!! {resource}");
-            }
-        }
-
-        GameObject[] allGameObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-        foreach (var gameObject in allGameObjects) {
-            if (gameObject.name.ToLower().Contains("blurmanager")) {
-                Logger.LogInfo($"found!!! {gameObject}");
-            }
-        }
-
-        String[] names = [
-            "BlurManager",
-            "Blur Manager",
-            "_GameCameras (BlurManager)"
-        ];
     }
 }
