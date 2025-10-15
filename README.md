@@ -17,6 +17,16 @@ This mod allows:
 
 Using a combination of these parameters can make the game look the same, but completely remove the distracting flickering.
 
+Before: 
+
+https://github.com/user-attachments/assets/83eef05f-16b2-497f-8402-fe771f915fc8
+
+After:
+
+https://github.com/user-attachments/assets/aebc2904-8367-448e-a53f-d6d412184327
+
+
+
 
 ## Installation
 
