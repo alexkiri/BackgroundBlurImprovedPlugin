@@ -7,7 +7,7 @@ A mod for Hollow Knight: Silksong that improves the quality of the blurred backg
 
 The game natively renders the background at a fixed 360p resolution. While this isn't very obvious because of the blur effect applied on top, it is noticeable and distracting when in motion, it appear flickery, as can be seen below:
 
-Before: 
+Before:
 
 https://github.com/user-attachments/assets/83eef05f-16b2-497f-8402-fe771f915fc8
 
@@ -43,7 +43,7 @@ Use r2modman or Gale.
 
 ## Configuration
 
-Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parameters in realtime, or edit the `com.alexkiri.silksong.blurimproved.cfg` file inside `<game folder>/BepInEx/config`,
+Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parameters in realtime, or edit the `com.alexkiri.silksong.blurimproved.cfg` file inside `<game folder>/BepInEx/config`
 
 Using a combination of these parameters can make the game look the same, but completely remove the distracting flickering.
 
@@ -57,9 +57,10 @@ Using a combination of these parameters can make the game look the same, but com
   - can increase intensity of the effect
   - has a medium / heavy impact on performance, values > 10 are not recommended
 - `EnableEffect`
-  - disables the blur effect completely
+  - can disable the blur effect completely
+  - not recommended, some source textures are low res, and without the blur effect, the background will look inconsistent
 - `Apply Presets`
-  - allows applying present from the UI (`BepinExConfigurationManager` only)
+  - allows applying presets from the UI (`BepinExConfigurationManager` only)
 
 ## TODO
 - Add controls to the the game's main menu
