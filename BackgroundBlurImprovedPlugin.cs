@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BackgroundBlurImproved;
 
-[BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.2.0")]
+[BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     private readonly Harmony harmony = new(Id);
 

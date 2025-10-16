@@ -1,0 +1,10 @@
+{
+	"name":"BackgroundBlurImproved",
+	"version_number":"0.7.0",
+	"website_url": "https://github.com/alexkiri/BackgroundBlurImprovedPlugin",
+	"description":"A mod for Hollow Knight: Silksong that improves the quality of the blurred background.",
+	"dependencies": [
+		"BepInEx-BepInExPack_Silksong-5.4.2303",
+		"Yukikaco-BepinExConfigurationManager-18.4.1"
+	]
+}
