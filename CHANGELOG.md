@@ -1,4 +1,9 @@
 # Changelog
+
+## Version 0.7.1
+- Icon update
+- Set AcceptableValueRange to (1, 32), the old value is extreme and just wastes performance
+
 ## Version 0.7.0
 - Initial public release
 - ArchiveContent csproj setting, setup deployment for thunderstore

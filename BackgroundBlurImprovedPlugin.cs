@@ -49,7 +49,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             4,
             new ConfigDescription(
                 "The number of passes of the BlurredBackground layer. Increases the intensity of the blur effect, with medium / heavy impact on performance. Game default is 2.",
-                new AcceptableValueRange<int>(1, 64),
+                new AcceptableValueRange<int>(1, 32),
                 new ConfigurationManagerAttributes { Order = 2 }
             )
         );
