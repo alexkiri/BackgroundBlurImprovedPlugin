@@ -22,7 +22,7 @@ https://imgsli.com/NDIyNDYx/0/2
 This mod allows adjusting the blur effect by:
 - increasing the resolution
 - increasing the intensity
-- disable the effect completely
+- disabling the effect completely
 
 
 ## Installation
@@ -64,4 +64,5 @@ Using a combination of these parameters can make the game look the same, but com
 
 ## TODO
 - Add controls to the the game's main menu
+- Fix the issue where the shader slightly offsets the background, the more passes you use
 - Update the background drawing logic to allow multiple background layers blurred at different intensities
