@@ -1,4 +1,5 @@
 using BepInEx;
+using BepInEx.Logging;
 using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
@@ -6,16 +7,17 @@ using UnityEngine;
 namespace BackgroundBlurImproved;
 [BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
+    public static ManualLogSource Logger;
     private readonly Harmony harmony = new(Id);
 
-    private static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
-    private static ConfigEntry<int> blurPassGroupCountConfigEntry;
-    private static ConfigEntry<bool> blurEnableConfigEntry;
+    public static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
+    public static ConfigEntry<int> blurPassGroupCountConfigEntry;
+    public static ConfigEntry<bool> blurEnableConfigEntry;
 
-    private static LightBlurredBackground? lightBlurredBackground;
+    public static LightBlurredBackground? lightBlurredBackground;
 
     private void Awake() {
-        Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
+        Logger = base.Logger;
         harmony.PatchAll();
 
         blurRenderTextureHeightConfigEntry = Config.Bind(
@@ -41,7 +43,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
                 lightBlurredBackground.lightBlur.enabled = blurEnable;
             }
         };
-        
+
         blurPassGroupCountConfigEntry = Config.Bind(
             "General",
             "PassGroupCount",
@@ -65,7 +67,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
                 lightBlurredBackground.lightBlur.enabled = blurEnable;
             }
         };
-        
+
         blurEnableConfigEntry = Config.Bind(
             "General",
             "EnableEffect",
@@ -94,6 +96,8 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
                 new ConfigurationManagerAttributes { HideDefaultButton = true, CustomDrawer = PresetsCustomDrawer, Order = 0 }
             )
         );
+        
+        Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
     }
 
     private void PresetsCustomDrawer(ConfigEntryBase configEntry) {
@@ -119,48 +123,6 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             blurEnableConfigEntry.Value = true;
             blurRenderTextureHeightConfigEntry.Value = BlurHeight.VeryHigh_1440;
             blurPassGroupCountConfigEntry.Value = 8;
-        }
-    }
-
-    [HarmonyPatch]
-    internal class Patcher {
-        [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
-        [HarmonyPostfix]
-        static void BlurManager_Awake(BlurManager __instance) {
-            var renderTextureHeight = (int)blurRenderTextureHeightConfigEntry.Value;
-            Debug.Log($"BlurManager.Awake() called on {__instance}[{__instance.GetHashCode()}] baseHeight: {__instance.baseHeight} -> {renderTextureHeight}");
-            __instance.baseHeight = renderTextureHeight;
-            lightBlurredBackground = __instance.lightBlurredBackground;
-        }
-
-        [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Update))]
-        [HarmonyPrefix]
-        static void BlurManager_Update(BlurManager __instance) {
-            var gm = GameManager.instance;
-            if (gm != null) {
-                // set the `appliedShaderQuality` so that when the real `Update` is called it doesn't overwrite the setting
-                ShaderQualities shaderQuality = gm.gameSettings.shaderQuality;
-                __instance.appliedShaderQuality = shaderQuality;
-            }
-        }
-
-        [HarmonyPatch(typeof(LightBlurredBackground), nameof(LightBlurredBackground.Awake))]
-        [HarmonyPostfix]
-        static void LightBlurredBackground_Awake(LightBlurredBackground __instance) {
-            var renderTextureHeight = (int)blurRenderTextureHeightConfigEntry.Value;
-            var passGroupCount = blurPassGroupCountConfigEntry.Value;
-
-            Debug.Log($"LightBlurredBackground.Awake called on {__instance}[{__instance.GetHashCode()}], renderTextureHeight: {__instance.renderTextureHeight} -> {renderTextureHeight}, passGroupCount: {__instance.passGroupCount} -> {passGroupCount}");
-            __instance.passGroupCount = passGroupCount;
-            __instance.renderTextureHeight = renderTextureHeight;
-        }
-
-        [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.Awake))]
-        [HarmonyPrefix]
-        static void LightBlur_Awake(LightBlur __instance) {
-            var blurEnable = (bool)blurEnableConfigEntry.Value;
-            Debug.Log($"LightBlur.Awake called on {__instance}[{__instance.GetHashCode()}], will enable {blurEnable}");
-            __instance.enabled = blurEnable;
         }
     }
 }
