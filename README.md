@@ -35,7 +35,7 @@ Use r2modman or Gale.
 
 1. Download [BepInExPack Silksong](https://thunderstore.io/c/hollow-knight-silksong/p/BepInEx/BepInExPack_Silksong/) and extract it to the game folder, next to the game executable
 2. Download [BepinExConfigurationManager](https://thunderstore.io/c/hollow-knight-silksong/p/Yukikaco/BepinExConfigurationManager/)
-2. Download from [BackgroundBlurImproved thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [BackgroundBlurImproved github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases/download/0.7.1/BackgroundBlurImproved.zip) and extract it inside of `<game folder>/BepInEx/plugins`
+2. Download from [BackgroundBlurImproved thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [BackgroundBlurImproved github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases/download/0.7.2/BackgroundBlurImproved.zip) and extract it inside of `<game folder>/BepInEx/plugins`
 3.
     - (Windows) Run the game normally
     - (Linux/MacOS) Run `run_bepinex.sh`
@@ -62,7 +62,9 @@ Using a combination of these parameters can make the game look the same, but com
 - `Apply Presets`
   - allows applying presets from the UI (`BepinExConfigurationManager` only)
 
+With this mod, the main menu "Blur Quality" setting no longer has any effect.
+
 ## TODO
-- Add controls to the the game's main menu
+- Add / replace controls in the game's video menu screen
 - Fix the issue where the shader slightly offsets the background, the more passes you use
 - Update the background drawing logic to allow multiple background layers blurred at different intensities

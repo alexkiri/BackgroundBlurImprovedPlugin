@@ -4,7 +4,6 @@ using HarmonyLib;
 using UnityEngine;
 
 namespace BackgroundBlurImproved;
-
 [BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     private readonly Harmony harmony = new(Id);
@@ -128,8 +127,21 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
         [HarmonyPostfix]
         static void BlurManager_Awake(BlurManager __instance) {
+            var renderTextureHeight = (int)blurRenderTextureHeightConfigEntry.Value;
+            Debug.Log($"BlurManager.Awake() called on {__instance}[{__instance.GetHashCode()}] baseHeight: {__instance.baseHeight} -> {renderTextureHeight}");
+            __instance.baseHeight = renderTextureHeight;
             lightBlurredBackground = __instance.lightBlurredBackground;
-            Debug.Log($"BlurManager.Awake()_postfix called on {__instance}[{__instance.GetHashCode()}] baseHeight:{__instance.baseHeight}");
+        }
+
+        [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Update))]
+        [HarmonyPrefix]
+        static void BlurManager_Update(BlurManager __instance) {
+            var gm = GameManager.instance;
+            if (gm != null) {
+                // set the `appliedShaderQuality` so that when the real `Update` is called it doesn't overwrite the setting
+                ShaderQualities shaderQuality = gm.gameSettings.shaderQuality;
+                __instance.appliedShaderQuality = shaderQuality;
+            }
         }
 
         [HarmonyPatch(typeof(LightBlurredBackground), nameof(LightBlurredBackground.Awake))]

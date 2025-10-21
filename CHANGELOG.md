@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.2
+- Properly apply the settings even when the "Blur Quality" setting from the video menu screen is set to low
+
 ## Version 0.7.1
 - Icon update
 - Set AcceptableValueRange to (1, 32), the old value is extreme and just wastes performance
