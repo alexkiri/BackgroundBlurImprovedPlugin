@@ -7,7 +7,8 @@ using UnityEngine;
 namespace BackgroundBlurImproved;
 [BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.0")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
-    public static ManualLogSource Logger;
+    // public static ManualLogSource Logger;
+    internal static new ManualLogSource Log;
     private readonly Harmony harmony = new(Id);
 
     public static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
@@ -17,7 +18,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     public static LightBlurredBackground? lightBlurredBackground;
 
     private void Awake() {
-        Logger = base.Logger;
+        Log = base.Logger;
         harmony.PatchAll();
 
         blurRenderTextureHeightConfigEntry = Config.Bind(
@@ -80,7 +81,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         );
         blurEnableConfigEntry.SettingChanged += (sender, args) => {
             var blurEnable = blurEnableConfigEntry.Value;
-            Debug.Log($"blurEnableConfigEntry.SettingChanged -> {blurEnable}");
+            Logger.LogInfo($"blurEnableConfigEntry.SettingChanged -> {blurEnable}");
             if (lightBlurredBackground != null) {
                 lightBlurredBackground.lightBlur.enabled = blurEnable;
             }

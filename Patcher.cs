@@ -1,17 +1,17 @@
-using BepInEx.Logging;
 using HarmonyLib;
+using BepInEx.Logging;
 
 namespace BackgroundBlurImproved;
 
 [HarmonyPatch]
 public class Patcher {
-    private static ManualLogSource Logger = BackgroundBlurImprovedPlugin.Logger;
-
+    private static readonly ManualLogSource Log = BackgroundBlurImprovedPlugin.Log;
+    
     [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
     [HarmonyPostfix]
     static void BlurManager_Awake(BlurManager __instance) {
         var renderTextureHeight = (int)BackgroundBlurImprovedPlugin.blurRenderTextureHeightConfigEntry.Value;
-        Logger.LogDebug($"BlurManager.Awake() called on {__instance}[{__instance.GetHashCode()}] baseHeight: {__instance.baseHeight} -> {renderTextureHeight}");
+        Log.LogDebug($"BlurManager.Awake() called on {__instance}[{__instance.GetHashCode()}] baseHeight: {__instance.baseHeight} -> {renderTextureHeight}");
         __instance.baseHeight = renderTextureHeight;
         BackgroundBlurImprovedPlugin.lightBlurredBackground = __instance.lightBlurredBackground;
     }
@@ -33,7 +33,7 @@ public class Patcher {
         var renderTextureHeight = (int)BackgroundBlurImprovedPlugin.blurRenderTextureHeightConfigEntry.Value;
         var passGroupCount = BackgroundBlurImprovedPlugin.blurPassGroupCountConfigEntry.Value;
 
-        Logger.LogDebug($"LightBlurredBackground.Awake called on {__instance}[{__instance.GetHashCode()}], renderTextureHeight: {__instance.renderTextureHeight} -> {renderTextureHeight}, passGroupCount: {__instance.passGroupCount} -> {passGroupCount}");
+        Log.LogDebug($"LightBlurredBackground.Awake called on {__instance}[{__instance.GetHashCode()}], renderTextureHeight: {__instance.renderTextureHeight} -> {renderTextureHeight}, passGroupCount: {__instance.passGroupCount} -> {passGroupCount}");
         __instance.passGroupCount = passGroupCount;
         __instance.renderTextureHeight = renderTextureHeight;
     }
@@ -42,20 +42,18 @@ public class Patcher {
     [HarmonyPrefix]
     static void LightBlur_Awake(LightBlur __instance) {
         var blurEnable = (bool)BackgroundBlurImprovedPlugin.blurEnableConfigEntry.Value;
-        Logger.LogDebug($"LightBlur.Awake called on {__instance}[{__instance.GetHashCode()}], will enable {blurEnable}");
+        Log.LogDebug($"LightBlur.Awake called on {__instance}[{__instance.GetHashCode()}], will enable {blurEnable}");
         __instance.enabled = blurEnable;
     }
 
     [HarmonyPatch(typeof(UIManager), nameof(UIManager.Awake))]
     [HarmonyPostfix]
     static void UIManager_Awake() {
-        var advancedVideoMenuScreen = UIManager.instance.advancedVideoMenuScreen;
-        if (advancedVideoMenuScreen == null) { return; }
-        var contentTransform = advancedVideoMenuScreen.transform.Find("Content");
-        if (contentTransform == null) { return; }
-        var shaderSettingTransform = contentTransform.Find("ShaderSetting");
-        if (shaderSettingTransform == null) { return; }
+        var uiMan = UIManager.instance;
+        if (uiMan == null) { return; }
 
-        shaderSettingTransform.gameObject.SetActive(false);
+        var shaderSetting = uiMan.advancedVideoMenuScreen.transform.Find("Content/ShaderSetting");
+        if (shaderSetting == null) { return; }
+        shaderSetting.gameObject.SetActive(false);
     }
 }
