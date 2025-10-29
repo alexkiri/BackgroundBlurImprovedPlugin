@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace BackgroundBlurImproved;
 
 public enum BlurHeight {
@@ -8,4 +10,17 @@ public enum BlurHeight {
     High_1080 = 1080,
     VeryHigh_1440 = 1440,
     UltraHigh_2160 = 2160
+}
+
+public enum BlurPreset {
+    [Description("Vanilla")]
+    Vanilla,
+    [Description("Medium")]
+    Medium,
+    [Description("High")]
+    High,
+    [Description("VeryHigh")]
+    VeryHigh,
+    [Description("Custom")]
+    Custom
 }

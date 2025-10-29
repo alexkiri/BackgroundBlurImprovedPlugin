@@ -7,7 +7,6 @@ using UnityEngine;
 namespace BackgroundBlurImproved;
 [BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.3")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
-    // public static ManualLogSource Logger;
     internal static new ManualLogSource Log;
     private readonly Harmony harmony = new(Id);
 
@@ -15,7 +14,24 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     public static ConfigEntry<int> blurPassGroupCountConfigEntry;
     public static ConfigEntry<bool> blurEnableConfigEntry;
 
+    public static ConfigEntry<BlurPreset> presetConfigEntry;
+
     public static LightBlurredBackground? lightBlurredBackground;
+
+    public static void applyCurrentSettings() {
+        var newRenderTextureHeightValue = (int)blurRenderTextureHeightConfigEntry.Value;
+        var newPassGroupCountValue = blurPassGroupCountConfigEntry.Value;
+        var newBlurEnableValue = blurEnableConfigEntry.Value;
+        if (lightBlurredBackground != null) {
+            Log.LogInfo($"will apply settings for {lightBlurredBackground} RenderTextureHeight: {lightBlurredBackground.renderTextureHeight}->{newRenderTextureHeightValue} PassGroupCount: {lightBlurredBackground.passGroupCount}->{newPassGroupCountValue}");
+            lightBlurredBackground.lightBlur.enabled = true;
+            lightBlurredBackground.RenderTextureHeight = newRenderTextureHeightValue;
+            lightBlurredBackground.PassGroupCount = newPassGroupCountValue;
+            lightBlurredBackground.enabled = false;
+            lightBlurredBackground.enabled = true;
+            lightBlurredBackground.lightBlur.enabled = newBlurEnableValue;
+        }
+    }
 
     private void Awake() {
         Log = base.Logger;
@@ -32,17 +48,8 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             )
         );
         blurRenderTextureHeightConfigEntry.SettingChanged += (sender, args) => {
-            var newValue = (int)blurRenderTextureHeightConfigEntry.Value;
-            var blurEnable = blurEnableConfigEntry.Value;
-            Logger.LogInfo($"blurRenderTextureHeightConfigEntry.SettingChanged -> {newValue}");
-            if (lightBlurredBackground != null) {
-                Logger.LogInfo($"will set RenderTextureHeight for {lightBlurredBackground} {lightBlurredBackground.renderTextureHeight} -> {newValue}");
-                lightBlurredBackground.lightBlur.enabled = true;
-                lightBlurredBackground.RenderTextureHeight = newValue;
-                lightBlurredBackground.enabled = false;
-                lightBlurredBackground.enabled = true;
-                lightBlurredBackground.lightBlur.enabled = blurEnable;
-            }
+            presetConfigEntry.Value = BlurPreset.Custom;
+            applyCurrentSettings();
         };
 
         blurPassGroupCountConfigEntry = Config.Bind(
@@ -56,17 +63,8 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             )
         );
         blurPassGroupCountConfigEntry.SettingChanged += (sender, args) => {
-            var newValue = blurPassGroupCountConfigEntry.Value;
-            var blurEnable = blurEnableConfigEntry.Value;
-            Logger.LogInfo($"blurPassGroupCountConfigEntry.SettingChanged -> {newValue}");
-            if (lightBlurredBackground != null) {
-                Logger.LogInfo($"will set PassGroupCount for {lightBlurredBackground} {lightBlurredBackground.passGroupCount} -> {newValue}");
-                lightBlurredBackground.lightBlur.enabled = true;
-                lightBlurredBackground.PassGroupCount = newValue;
-                lightBlurredBackground.enabled = false;
-                lightBlurredBackground.enabled = true;
-                lightBlurredBackground.lightBlur.enabled = blurEnable;
-            }
+            presetConfigEntry.Value = BlurPreset.Custom;
+            applyCurrentSettings();
         };
 
         blurEnableConfigEntry = Config.Bind(
@@ -81,49 +79,71 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         );
         blurEnableConfigEntry.SettingChanged += (sender, args) => {
             var blurEnable = blurEnableConfigEntry.Value;
-            Logger.LogInfo($"blurEnableConfigEntry.SettingChanged -> {blurEnable}");
+            Log.LogInfo($"blurEnableConfigEntry.SettingChanged -> {blurEnable}");
+            presetConfigEntry.Value = BlurPreset.Custom;
             if (lightBlurredBackground != null) {
                 lightBlurredBackground.lightBlur.enabled = blurEnable;
             }
         };
 
-        Config.Bind(
+        presetConfigEntry = Config.Bind(
             "General",
-            "Apply Presets",
-            "",
+            "Apply Preset",
+            BlurPreset.Medium,
             new ConfigDescription(
                 "Click to apply any preset.",
                 null,
                 new ConfigurationManagerAttributes { HideDefaultButton = true, CustomDrawer = PresetsCustomDrawer, Order = 0 }
             )
         );
-        
-        Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
+
+        var gc = GameCameras.instance;
+        if (gc != null) {
+            Log.LogInfo($"Existing GameCameras object found {gc}");
+            var lbb = gc.GetComponent<LightBlurredBackground>();
+            if (lbb != null) {
+                Log.LogInfo($"Existing LightBlurredBackground object found {lbb}");
+                lightBlurredBackground = lbb;
+                applyCurrentSettings();
+            }
+        }
+
+        Log.LogInfo($"Plugin {Name} ({Id}) has loaded!");
+    }
+    
+    private void OnDestroy() {
+        harmony.UnpatchSelf();
+        lightBlurredBackground = null;
+        Log.LogInfo($"Plugin {Name} ({Id}) has unloaded!");
     }
 
     private void PresetsCustomDrawer(ConfigEntryBase configEntry) {
-        if (GUILayout.Button("Vanilla", GUILayout.ExpandWidth(true))) {
+        if (GUILayout.Button(BlurPreset.Vanilla.ToString(), GUILayout.ExpandWidth(true))) {
             blurEnableConfigEntry.Value = true;
             blurRenderTextureHeightConfigEntry.Value = BlurHeight.Vanilla_360;
             blurPassGroupCountConfigEntry.Value = 2;
+            presetConfigEntry.Value = BlurPreset.Vanilla;
         }
 
-        if (GUILayout.Button("Medium", GUILayout.ExpandWidth(true))) {
+        if (GUILayout.Button(BlurPreset.Medium.ToString(), GUILayout.ExpandWidth(true))) {
             blurEnableConfigEntry.Value = true;
             blurRenderTextureHeightConfigEntry.Value = BlurHeight.Medium_720;
             blurPassGroupCountConfigEntry.Value = 4;
+            presetConfigEntry.Value = BlurPreset.Medium;
         }
 
-        if (GUILayout.Button("High", GUILayout.ExpandWidth(true))) {
+        if (GUILayout.Button(BlurPreset.High.ToString(), GUILayout.ExpandWidth(true))) {
             blurEnableConfigEntry.Value = true;
             blurRenderTextureHeightConfigEntry.Value = BlurHeight.High_1080;
             blurPassGroupCountConfigEntry.Value = 6;
+            presetConfigEntry.Value = BlurPreset.High;
         }
 
-        if (GUILayout.Button("VeryHigh", GUILayout.ExpandWidth(true))) {
+        if (GUILayout.Button(BlurPreset.VeryHigh.ToString(), GUILayout.ExpandWidth(true))) {
             blurEnableConfigEntry.Value = true;
             blurRenderTextureHeightConfigEntry.Value = BlurHeight.VeryHigh_1440;
             blurPassGroupCountConfigEntry.Value = 8;
+            presetConfigEntry.Value = BlurPreset.VeryHigh;
         }
     }
 }
