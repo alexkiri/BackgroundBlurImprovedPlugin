@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.3
+- Remove the "Blur Quality" setting from the video options menu screen
+
 ## Version 0.7.2
 - Properly apply the settings even when the "Blur Quality" setting from the video menu screen is set to low
 
