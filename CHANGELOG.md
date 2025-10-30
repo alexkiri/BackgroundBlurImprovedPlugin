@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.5
+- Rename / move some files, prepare for Thunderstore publish
+
 ## Version 0.7.4
 - Reorganize ConfigEntry logic in order to work better with hot reload
 - Update to Silksong.Modding.Templates version 2.0.0
