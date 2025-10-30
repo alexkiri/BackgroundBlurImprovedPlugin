@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.7.4
+- Reorganize ConfigEntry logic in order to work better with hot reload
+- Update to Silksong.Modding.Templates version 2.0.0
+
 ## Version 0.7.3
 - Remove the "Blur Quality" setting from the video options menu screen
 - Bump dependencies

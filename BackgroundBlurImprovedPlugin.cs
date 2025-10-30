@@ -5,9 +5,10 @@ using HarmonyLib;
 using UnityEngine;
 
 namespace BackgroundBlurImproved;
-[BepInAutoPlugin("com.alexkiri.silksong.blurimproved", "Background Blur Improved", "0.7.3")]
+
+[BepInAutoPlugin(id: "io.github.alexkiri.backgroundblurimproved")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
-    internal static new ManualLogSource Log;
+    internal static ManualLogSource Log;
     private readonly Harmony harmony = new(Id);
 
     public static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;

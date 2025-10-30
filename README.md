@@ -35,7 +35,8 @@ Use r2modman or Gale.
 
 1. Download [BepInExPack Silksong](https://thunderstore.io/c/hollow-knight-silksong/p/BepInEx/BepInExPack_Silksong/) and extract it to the game folder, next to the game executable
 2. Download [BepinExConfigurationManager](https://thunderstore.io/c/hollow-knight-silksong/p/Yukikaco/BepinExConfigurationManager/)
-2. Download from [BackgroundBlurImproved thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [BackgroundBlurImproved github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases/download/0.7.3/BackgroundBlurImproved.zip) and extract it inside of `<game folder>/BepInEx/plugins`
+2. Download from [thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [github]
+(https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases) and extract it inside of `<game folder>/BepInEx/plugins`
 3.
     - (Windows) Run the game normally
     - (Linux/MacOS) Run `run_bepinex.sh`
