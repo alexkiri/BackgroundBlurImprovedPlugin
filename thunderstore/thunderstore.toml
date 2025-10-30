@@ -8,7 +8,7 @@ namespace = "alexkiri"
 description = "Improves the quality of the blurred background, allows some customizations"
 
 # Replace this with a correct repo URL if the default is not accurate
-websiteUrl = "github.com/alexkiri/BackgroundBlurImprovedPlugin"
+websiteUrl = "https://github.com/alexkiri/BackgroundBlurImprovedPlugin"
 containsNsfwContent = false
 
 
