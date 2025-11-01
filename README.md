@@ -34,9 +34,8 @@ Use r2modman or Gale.
 ### Manual
 
 1. Download [BepInExPack Silksong](https://thunderstore.io/c/hollow-knight-silksong/p/BepInEx/BepInExPack_Silksong/) and extract it to the game folder, next to the game executable
-2. Download [BepinExConfigurationManager](https://thunderstore.io/c/hollow-knight-silksong/p/Yukikaco/BepinExConfigurationManager/)
-2. Download from [thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [github]
-(https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases) and extract it inside of `<game folder>/BepInEx/plugins`
+2. Download [BepinExConfigurationManager](https://thunderstore.io/c/hollow-knight-silksong/p/jakobhellermann/BepinExConfigurationManager/)
+2. Download from [thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases) and extract it inside of `<game folder>/BepInEx/plugins`
 3.
     - (Windows) Run the game normally
     - (Linux/MacOS) Run `run_bepinex.sh`
@@ -44,7 +43,7 @@ Use r2modman or Gale.
 
 ## Configuration
 
-Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parameters in realtime, or edit the `com.alexkiri.silksong.blurimproved.cfg` file inside `<game folder>/BepInEx/config`
+Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parameters in realtime, or edit the `io.github.alexkiri.backgroundblurimproved.cfg` file inside `<game folder>/BepInEx/config`
 
 Using a combination of these parameters can make the game look the same, but completely remove the distracting flickering.
 
