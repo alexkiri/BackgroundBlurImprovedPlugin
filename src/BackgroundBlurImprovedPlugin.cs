@@ -14,7 +14,6 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     public static ConfigEntry<BlurHeight> blurRenderTextureHeightConfigEntry;
     public static ConfigEntry<int> blurPassGroupCountConfigEntry;
     public static ConfigEntry<bool> blurEnableConfigEntry;
-
     public static ConfigEntry<BlurPreset> presetConfigEntry;
 
     public static LightBlurredBackground? lightBlurredBackground;
@@ -109,9 +108,15 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             }
         }
 
+        var um = UIManager.instance;
+        if (um != null) {
+            Log.LogInfo($"Existing UIManager object found {um}");
+            CustomizeMenu(um);
+        }
+
         Log.LogInfo($"Plugin {Name} ({Id}) has loaded!");
     }
-    
+
     private void OnDestroy() {
         harmony.UnpatchSelf();
         lightBlurredBackground = null;
@@ -146,5 +151,11 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             blurPassGroupCountConfigEntry.Value = 8;
             presetConfigEntry.Value = BlurPreset.VeryHigh;
         }
+    }
+
+    public static void CustomizeMenu(UIManager um) {
+        var shaderSetting = um.advancedVideoMenuScreen.transform.Find("Content/ShaderSetting");
+        if (shaderSetting == null) { return; }
+        shaderSetting.gameObject.SetActive(false);
     }
 }

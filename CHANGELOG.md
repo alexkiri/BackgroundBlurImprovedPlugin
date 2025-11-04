@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.6
+- Readme update, add url, small code cleanup, hot reload fix
+
 ## Version 0.7.5
 - Rename / move some files, prepare for Thunderstore publish
 

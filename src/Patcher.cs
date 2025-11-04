@@ -6,7 +6,7 @@ namespace BackgroundBlurImproved;
 [HarmonyPatch]
 public class Patcher {
     private static readonly ManualLogSource Log = BackgroundBlurImprovedPlugin.Log;
-    
+
     [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Awake))]
     [HarmonyPostfix]
     static void BlurManager_Awake(BlurManager __instance) {
@@ -48,12 +48,8 @@ public class Patcher {
 
     [HarmonyPatch(typeof(UIManager), nameof(UIManager.Awake))]
     [HarmonyPostfix]
-    static void UIManager_Awake() {
-        var uiMan = UIManager.instance;
-        if (uiMan == null) { return; }
-
-        var shaderSetting = uiMan.advancedVideoMenuScreen.transform.Find("Content/ShaderSetting");
-        if (shaderSetting == null) { return; }
-        shaderSetting.gameObject.SetActive(false);
+    public static void UIManager_Awake(UIManager __instance) {
+        Log.LogDebug($"UIManager.Awake called on {__instance}[{__instance.GetHashCode()}]");
+        BackgroundBlurImprovedPlugin.CustomizeMenu(__instance);
     }
 }
