@@ -29,17 +29,8 @@
     <PackageReference Include="HarmonyX" Version="2.9.0" />
     <PackageReference Include="Hamunii.BepInEx.AutoPlugin" Version="2.0.1" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.25.0" PrivateAssets="all" />
-    <PackageReference
-      Include="UnityEngine.Modules"
-      Version="6000.0.50"
-      IncludeAssets="compile"
-    />
-    <PackageReference
-      Include="Silksong.GameLibs"
-      Version="*-*"
-      PrivateAssets="all"
-
-    />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.50" IncludeAssets="compile" />
+    <PackageReference Include="Silksong.GameLibs" Version="*-*" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <Folder Remove="thunderstore/temp;thunderstore/dist" />
@@ -48,20 +39,23 @@
   </ItemGroup>
   <Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <Binaries Include="$(TargetPath)" />
-      <Binaries Include="$(TargetDir)/$(TargetName).pdb" />
+      <Binaries Include="$(TargetPath)" LocalDir="/" PackDir="/" />
+      <Binaries Include="$(TargetDir)/$(TargetName).pdb" LocalDir="/" PackDir="/" />
     </ItemGroup>
     <PropertyGroup>
       <ThunderstoreDir>$(ProjectDir)/thunderstore</ThunderstoreDir>
     </PropertyGroup>
     <Copy
       SourceFiles="@(Binaries)"
-      DestinationFolder="$(SilksongFolder)/BepInEx/plugins/alexkiri-$(AssemblyTitle)"
+      DestinationFolder="$(SilksongFolder)/BepInEx/plugins/alexkiri-$(AssemblyTitle)/%(Binaries.LocalDir)"
       Condition="'$(SilksongFolder)' != '' And Exists('$(SilksongFolder)')"
     />
     <RemoveDir Directories="$(ThunderstoreDir)/temp;$(ThunderstoreDir)/dist" />
     <MakeDir Directories="$(ThunderstoreDir)/temp" />
-    <Copy SourceFiles="@(Binaries)" DestinationFolder="$(ThunderstoreDir)/temp" />
+    <Copy
+      SourceFiles="@(Binaries)"
+      DestinationFolder="$(ThunderstoreDir)/temp/%(Binaries.PackDir)"
+    />
     <Exec Command="dotnet tool restore" />
     <Exec
       Command="dotnet tcli build --config-path &quot;$(ThunderstoreDir)/thunderstore.toml&quot; --package-name &quot;$(AssemblyTitle)&quot; --package-version $(Version)"
