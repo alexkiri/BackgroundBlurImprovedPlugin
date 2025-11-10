@@ -46,6 +46,14 @@ public class Patcher {
         __instance.enabled = blurEnable;
     }
 
+    [HarmonyPatch(typeof(BloomOptimized), nameof(BloomOptimized.Awake))]
+    [HarmonyPostfix]
+    static void BloomOptimized_Awake(BloomOptimized __instance) {
+        Log.LogDebug($"BloomOptimized.Awake called on {__instance}[{__instance.GetHashCode()}]");
+        BackgroundBlurImprovedPlugin.bloomOptimized = __instance;
+        BackgroundBlurImprovedPlugin.applyBloomOptimizedSettings();
+    }
+
     [HarmonyPatch(typeof(UIManager), nameof(UIManager.Awake))]
     [HarmonyPostfix]
     public static void UIManager_Awake(UIManager __instance) {

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.7.7
+- Add ability to change the Bloom effect settings
+- Reorganize settings menu
+
 ## Version 0.7.6
 - Readme update, add url, small code cleanup, hot reload fix
 

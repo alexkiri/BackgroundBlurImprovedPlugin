@@ -47,20 +47,25 @@ Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parame
 
 Using a combination of these parameters can make the game look the same, but completely remove the distracting flickering.
 
+- `Apply Presets`
+  - allows applying presets from the UI (`BepinExConfigurationManager` only)
 - `RenderTextureHeight`
-  - increases the resolution of the render target that displays the effect
-  - improves the quality
-  - lowers the blur intensity
+  - increases the resolution of the render target that displays the background blur effect
+  - improves the quality of the effect
+  - lowers the effect intensity
   - has low impact on performance
 - `PassGroupCount`
-  - increases the number of passes of the blur effect
+  - increases the number of passes of the background blur effect
   - can increase intensity of the effect
   - has a medium / heavy impact on performance, values > 10 are not recommended
 - `EnableEffect`
-  - can disable the blur effect completely
+  - can disable the background blur effect completely
   - not recommended, some source textures are low res, and without the blur effect, the background will look inconsistent
-- `Apply Presets`
-  - allows applying presets from the UI (`BepinExConfigurationManager` only)
+- `BloomResolution`
+  - resolution of the bloom effect
+  - can choose between Low -> 1/4 main resolution, or High -> 1/2
+- `BloomBlurIterations`
+  - number of iterations for the bloom effect
 
 The main menu "Blur Quality" setting is removed from the main menu, as it no longer has any effect with this mod enabled.
 
