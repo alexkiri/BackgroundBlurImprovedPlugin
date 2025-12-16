@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.8.0
+- Add ModMenu, remove BepInExConfigurationManager thunderstore dependencies
+
 ## Version 0.7.7
 - Add ability to change the Bloom effect settings
 - Reorganize settings menu
