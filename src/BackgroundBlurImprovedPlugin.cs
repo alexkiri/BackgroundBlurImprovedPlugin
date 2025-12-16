@@ -22,7 +22,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     public static LightBlurredBackground? lightBlurredBackground;
     public static BloomOptimized? bloomOptimized;
 
-    public static void applyBlurredBackgroundSettings() {
+    public static void ApplyBlurredBackgroundSettings() {
         var newRenderTextureHeightValue = (int)blurRenderTextureHeightConfigEntry.Value;
         var newPassGroupCountValue = blurPassGroupCountConfigEntry.Value;
         var newBlurEnableValue = blurEnableConfigEntry.Value;
@@ -37,7 +37,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         }
     }
 
-    public static void applyBloomOptimizedSettings() {
+    public static void ApplyBloomOptimizedSettings() {
         var newResolution = bloomOptimizedResolutionConfig.Value;
         var newBlurIterations = bloomOptimizedBlurIterationsConfig.Value;
         if (bloomOptimized != null) {
@@ -63,7 +63,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         );
         blurRenderTextureHeightConfigEntry.SettingChanged += (sender, args) => {
             presetConfigEntry.Value = BlurPreset.Custom;
-            applyBlurredBackgroundSettings();
+            ApplyBlurredBackgroundSettings();
         };
 
         blurPassGroupCountConfigEntry = Config.Bind(
@@ -78,7 +78,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         );
         blurPassGroupCountConfigEntry.SettingChanged += (sender, args) => {
             presetConfigEntry.Value = BlurPreset.Custom;
-            applyBlurredBackgroundSettings();
+            ApplyBlurredBackgroundSettings();
         };
 
         blurEnableConfigEntry = Config.Bind(
@@ -118,7 +118,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             "The resolution of the Bloom effect. Low is 1/4 main resolution, High is 1/2"
         );
         bloomOptimizedResolutionConfig.SettingChanged += (_, _) => {
-            applyBloomOptimizedSettings();
+            ApplyBloomOptimizedSettings();
         };
 
         bloomOptimizedBlurIterationsConfig = Config.Bind(
@@ -131,7 +131,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             )
         );
         bloomOptimizedBlurIterationsConfig.SettingChanged += (_, _) => {
-            applyBloomOptimizedSettings();
+            ApplyBloomOptimizedSettings();
         };
 
         var gc = GameCameras.instance;
@@ -141,13 +141,13 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             if (lbb != null) {
                 Log.LogInfo($"Existing LightBlurredBackground object found {lbb}");
                 lightBlurredBackground = lbb;
-                applyBlurredBackgroundSettings();
+                ApplyBlurredBackgroundSettings();
             }
             var bo = gc.tk2dCam.GetComponent<BloomOptimized>();
             if (bo != null) {
                 Log.LogInfo($"Existing BloomOptimized object found {bo}");
                 bloomOptimized = bo;
-                applyBloomOptimizedSettings();
+                ApplyBloomOptimizedSettings();
             }
         }
 

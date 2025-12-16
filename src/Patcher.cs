@@ -51,7 +51,7 @@ public class Patcher {
     static void BloomOptimized_Awake(BloomOptimized __instance) {
         Log.LogDebug($"BloomOptimized.Awake called on {__instance}[{__instance.GetHashCode()}]");
         BackgroundBlurImprovedPlugin.bloomOptimized = __instance;
-        BackgroundBlurImprovedPlugin.applyBloomOptimizedSettings();
+        BackgroundBlurImprovedPlugin.ApplyBloomOptimizedSettings();
     }
 
     [HarmonyPatch(typeof(UIManager), nameof(UIManager.Awake))]
