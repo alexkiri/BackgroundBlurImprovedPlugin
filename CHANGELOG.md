@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.8
+- Added more BlurHeight options for more granular control
+
 ## Version 0.7.7
 - Add ability to change the Bloom effect settings
 - Reorganize settings menu
