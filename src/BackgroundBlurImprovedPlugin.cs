@@ -3,7 +3,6 @@ using BepInEx.Logging;
 using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
-using Silksong.ModMenu.Plugin;
 
 namespace BackgroundBlurImproved;
 
@@ -142,8 +141,6 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         bloomOptimizedBlurIterationsConfig.SettingChanged += (_, _) => {
             ApplyBloomOptimizedSettings();
         };
-
-        ConfigEntryFactory.AddDefaultGenerator(MenuElementGenerators.CreateIntSliderGenerator());
 
         var gc = GameCameras.instance;
         if (gc != null) {
