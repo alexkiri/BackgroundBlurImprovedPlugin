@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
+using Silksong.ModMenu.Plugin;
 
 namespace BackgroundBlurImproved;
 
@@ -75,8 +76,9 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             4,
             new ConfigDescription(
                 "Number of blur effect passes. Medium / heavy performance impact.",
-                new AcceptableValueRange<int>(1, 32),
-                new ConfigurationManagerAttributes { Order = 2 }
+                new AcceptableValueRange<int>(1, 16),
+                new ConfigurationManagerAttributes { Order = 2 },
+                MenuElementGenerators.CreateIntSliderGenerator()
             )
         );
         blurPassGroupCountConfigEntry.SettingChanged += (sender, args) => {
@@ -135,7 +137,8 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             1,
             new ConfigDescription(
                 "Number of iterations for the Bloom effect.",
-                new AcceptableValueRange<int>(1, 16)
+                new AcceptableValueRange<int>(1, 16),
+                MenuElementGenerators.CreateIntSliderGenerator()
             )
         );
         bloomOptimizedBlurIterationsConfig.SettingChanged += (_, _) => {

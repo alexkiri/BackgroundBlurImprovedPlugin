@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/aebc2904-8367-448e-a53f-d6d412184327
 
 Image comparison:
 
-https://imgsli.com/NDIyNDYx/0/2
+https://compare.promptingpixels.com/a/k6FwSSq
 
 This mod allows adjusting the blur effect by:
 - increasing the resolution
@@ -29,36 +29,40 @@ This mod allows adjusting the blur effect by:
 
 ### The Simple Way
 
-Use r2modman or Gale.
+Use r2modman or Gale. This will properly take care of dependencies.
 
 ### Manual
 
 1. Download [BepInExPack Silksong](https://thunderstore.io/c/hollow-knight-silksong/p/BepInEx/BepInExPack_Silksong/) and extract it to the game folder, next to the game executable
 2. Download [BepinExConfigurationManager](https://thunderstore.io/c/hollow-knight-silksong/p/jakobhellermann/BepinExConfigurationManager/)
-2. Download from [github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases), [thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [nexusmods](https://www.nexusmods.com/hollowknightsilksong/mods/661) and extract it inside of `<game folder>/BepInEx/plugins`
-3.
+3. Download [ModMenu](https://thunderstore.io/c/hollow-knight-silksong/p/silksong_modding/ModMenu/) and it's dependencies
+3. Download from [github](https://github.com/alexkiri/BackgroundBlurImprovedPlugin/releases), [thunderstore](https://thunderstore.io/c/hollow-knight-silksong/p/alexkiri/BackgroundBlurImproved/) or [nexusmods](https://www.nexusmods.com/hollowknightsilksong/mods/661) and extract it inside of `<game folder>/BepInEx/plugins`
+4.
     - (Windows) Run the game normally
     - (Linux/MacOS) Run `run_bepinex.sh`
 
 
 ## Configuration
 
-Use `BepinExConfigurationManager` (open with F1 by default) to adjust the parameters in realtime, or edit the `io.github.alexkiri.backgroundblurimproved.cfg` file inside `<game folder>/BepInEx/config`
+Any of these methods work:
+- Use `ModMenu` and access in-game Option -> Mods
+- Use `BepinExConfigurationManager` and open with F1 by default
+- Manually edit the `io.github.alexkiri.backgroundblurimproved.cfg` file inside `<game folder>/BepInEx/config`
 
 Using a combination of these parameters can make the game look the same, but completely remove the distracting flickering.
 
-- `Apply Presets`
+- `ApplyBlurPreset`
   - allows applying presets from the UI (`BepinExConfigurationManager` only)
-- `RenderTextureHeight`
+- `BlurTextureHeight`
   - increases the resolution of the render target that displays the background blur effect
   - improves the quality of the effect
   - lowers the effect intensity
   - has low impact on performance
-- `PassGroupCount`
+- `BlurPassCount`
   - increases the number of passes of the background blur effect
   - can increase intensity of the effect
   - has a medium / heavy impact on performance, values > 10 are not recommended
-- `EnableEffect`
+- `BlurEffectEnabled`
   - can disable the background blur effect completely
   - not recommended, some source textures are low res, and without the blur effect, the background will look inconsistent
 - `BloomResolution`
@@ -70,7 +74,10 @@ Using a combination of these parameters can make the game look the same, but com
 The main menu "Blur Quality" setting is removed from the main menu, as it no longer has any effect with this mod enabled.
 
 
+## Other important notes
+
+Using a big `BlurPassCount` causes an issue where the shader slightly offsets the background, the more passes you use. The only fix is to use [renodx](https://github.com/clshortfuse/renodx/wiki/Mods) (follow the installation, and look for Silksong). This mod also greatly improves the look of the game by adding HDR, 16bit rendering, without compromising the artistic intent. Highly recommended.
+
+
 ## TODO
-- Add / replace controls in the game's video menu screen
-- Fix the issue where the shader slightly offsets the background, the more passes you use
-- Update the background drawing logic to allow multiple background layers blurred at different intensities
+- [ ] Update the background drawing logic to allow multiple background layers blurred at different intensities
