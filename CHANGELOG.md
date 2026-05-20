@@ -2,6 +2,8 @@
 
 ## Version 0.8.0
 - Add ModMenu, remove BepInExConfigurationManager thunderstore dependencies
+- Adjust descriptions to better fit on screen
+- Adjust settings to properly reload when using ModMenu
 
 ## Version 0.7.8
 - Added more BlurHeight options for more granular control
