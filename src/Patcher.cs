@@ -19,10 +19,10 @@ public class Patcher {
     [HarmonyPatch(typeof(BlurManager), nameof(BlurManager.Update))]
     [HarmonyPrefix]
     static void BlurManager_Update(BlurManager __instance) {
-        var gm = GameManager.instance;
-        if (gm != null) {
+        var gameManager = GameManager.instance;
+        if (gameManager != null) {
             // set the `appliedShaderQuality` so that when the real `Update` is called it doesn't overwrite the setting
-            ShaderQualities shaderQuality = gm.gameSettings.shaderQuality;
+            ShaderQualities shaderQuality = gameManager.gameSettings.shaderQuality;
             __instance.appliedShaderQuality = shaderQuality;
         }
     }
@@ -41,9 +41,9 @@ public class Patcher {
     [HarmonyPatch(typeof(LightBlur), nameof(LightBlur.Awake))]
     [HarmonyPrefix]
     static void LightBlur_Awake(LightBlur __instance) {
-        var blurEnable = (bool)BackgroundBlurImprovedPlugin.blurEnableConfigEntry.Value;
-        Log.LogDebug($"LightBlur.Awake called on {__instance}[{__instance.GetHashCode()}], will enable {blurEnable}");
-        __instance.enabled = blurEnable;
+        var blurEnabled = (bool)BackgroundBlurImprovedPlugin.blurEnableConfigEntry.Value;
+        Log.LogDebug($"LightBlur.Awake called on {__instance}[{__instance.GetHashCode()}], will enable {blurEnabled}");
+        __instance.enabled = blurEnabled;
     }
 
     [HarmonyPatch(typeof(BloomOptimized), nameof(BloomOptimized.Awake))]
