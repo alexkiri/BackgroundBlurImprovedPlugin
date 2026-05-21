@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.8.1
+- Adjust enum names to look slightly better with ModMenu
+
 ## Version 0.8.0
 - Add ModMenu, remove BepInExConfigurationManager thunderstore dependencies
 - Adjust descriptions to better fit on screen

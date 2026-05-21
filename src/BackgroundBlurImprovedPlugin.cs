@@ -8,6 +8,7 @@ using Silksong.ModMenu.Plugin;
 namespace BackgroundBlurImproved;
 
 [BepInAutoPlugin(id: "io.github.alexkiri.backgroundblurimproved")]
+[BepInDependency("org.silksong-modding.modmenu", "0.7.4")]
 public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
     internal static ManualLogSource Log;
     private readonly Harmony harmony = new(Id);
@@ -56,7 +57,7 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
         blurRenderTextureHeightConfigEntry = Config.Bind(
             "BlurredBackground",
             "BlurTextureHeight",
-            BlurHeight.Medium_720,
+            BlurHeight.Medium720,
             new ConfigDescription(
                 "Height of the BlurredBackground layer. Improves quality, lowers effect intensity.",
                 null,
@@ -183,22 +184,22 @@ public partial class BackgroundBlurImprovedPlugin : BaseUnityPlugin {
             switch (preset) {
                 case BlurPreset.Vanilla:
                     blurEnableConfigEntry.Value = true;
-                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.Vanilla_360;
+                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.Vanilla360;
                     blurPassGroupCountConfigEntry.Value = 2;
                     break;
                 case BlurPreset.Medium:
                     blurEnableConfigEntry.Value = true;
-                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.Medium_720;
+                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.Medium720;
                     blurPassGroupCountConfigEntry.Value = 4;
                     break;
                 case BlurPreset.High:
                     blurEnableConfigEntry.Value = true;
-                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.High_1080;
+                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.High1080;
                     blurPassGroupCountConfigEntry.Value = 6;
                     break;
                 case BlurPreset.VeryHigh:
                     blurEnableConfigEntry.Value = true;
-                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.VeryHigh_1440;
+                    blurRenderTextureHeightConfigEntry.Value = BlurHeight.Veryhigh1440;
                     blurPassGroupCountConfigEntry.Value = 8;
                     break;
             }

@@ -45,7 +45,7 @@ Use r2modman or Gale. This will properly take care of dependencies.
 ## Configuration
 
 Any of these methods work:
-- Use `ModMenu` and access in-game Option -> Mods
+- Use `ModMenu` and access in-game Options -> Mods
 - Use `BepinExConfigurationManager` and open with F1 by default
 - Manually edit the `io.github.alexkiri.backgroundblurimproved.cfg` file inside `<game folder>/BepInEx/config`
 
@@ -80,4 +80,6 @@ Using a big `BlurPassCount` causes an issue where the shader slightly offsets th
 
 
 ## TODO
+- [ ] Update the Sliders to use the [WiderSliderElement](https://github.com/kaycodes13/Silksong.EdgeDetection/blob/main/Menu/WiderSliderElement.cs), it looks much better with the ModMenu
+- [ ] Add translations using [Silksong.I18N](https://github.com/silksong-modding/Silksong.I18N)
 - [ ] Update the background drawing logic to allow multiple background layers blurred at different intensities
